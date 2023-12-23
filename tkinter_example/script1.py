@@ -1,5 +1,5 @@
 import logging
-
+import tkinter as tk
 
 #ロガーの生成
 logger = logging.getLogger('mylog')
@@ -20,6 +20,20 @@ logger.addHandler(handler)
 debug_msg = 'debug message'
 error_msg = 'error_message'
 
+def pushed(b):
+    b['text'] = 'clicked'
+    print('clicked')
+
 def main():
-    logger.debug('[START] My System Start')
+    root = tk.Tk()
+    root.title('Tkinter example')
+    #メインウィンドウを640x480にする
+    root.geometry('640x480')
+    label = tk.Label(root, text='Hello,World')
+    label.grid()
+    button = tk.Button(root, text='Button', command= lambda : pushed(button))
+    button.grid()
+    root.mainloop()
+
+    # logger.debug('[START] My System Start')
     print('[SUCCESS] py -m  myproject')
