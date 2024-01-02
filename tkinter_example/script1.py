@@ -2,20 +2,20 @@ import logging
 import tkinter as tk
 
 #ロガーの生成
-logger = logging.getLogger('mylog')
+# logger = logging.getLogger('mylog')
 
-#出力レベルの設定
-logger.setLevel(logging.DEBUG)
+# #出力レベルの設定
+# logger.setLevel(logging.DEBUG)
 
-#ハンドラの設定
-handler = logging.FileHandler('./logs/logfile.log')
+# #ハンドラの設定
+# handler = logging.FileHandler('./logs/logfile.log')
 
-#フォーマッタの生成
-fmt = logging.Formatter('%(asctime)s%(message)s')
-handler.setFormatter(fmt)
+# #フォーマッタの生成
+# fmt = logging.Formatter('%(asctime)s%(message)s')
+# handler.setFormatter(fmt)
 
-#ハンドラをloggerに追加
-logger.addHandler(handler)
+# #ハンドラをloggerに追加
+# logger.addHandler(handler)
 
 debug_msg = 'debug message'
 error_msg = 'error_message'
