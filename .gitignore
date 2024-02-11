@@ -5,3 +5,5 @@ __pycache__
 tkinter_example/__pycache__/*
 Foo/__pycache__/*
 Common/__pycache__/*
+build/*
+.venv/*
