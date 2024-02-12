@@ -3,9 +3,13 @@
 import tkinter as tk
 
 class MainWindow(tk.Frame):
-    def __init__(self, master=None):
+    def __init__(self, master=None, mode="user"):
         super().__init__(master)
         self.pack()
+        
+        # 起動モード
+        self.mode = mode
+        print("Opearation mode:" + mode)
         
         self.width = 1150
         self.height = 800

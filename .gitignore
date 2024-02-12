@@ -7,3 +7,4 @@ Foo/__pycache__/*
 Common/__pycache__/*
 build/*
 .venv/*
+.python-version
