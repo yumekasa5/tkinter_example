@@ -1,75 +1,86 @@
+import tkinter as tk
+from SerialComControl.SerialComControl import SerialComControl
+from ControlGUI.SettingDialog import SettingDialog
+
 # !/usr/bin/python3
 # SPDX-FileCopyrightText: 2024 yumekasa5
-import tkinter as tk
 import tkinter.ttk as ttk
 import tkinter.filedialog
 
-from ControlGUI import Figure
+
 
 class MainWindow(tk.Frame):
     def __init__(self, master=None, mode="user"):
         super().__init__(master)
-        self.pack()
-        
-        # 起動モード
+        self.master = master
         self.mode = mode
-        print("Opearation mode:" + mode)
-        
+        # self.serial_com = SerialComControl(port="COM3", baudrate=9600, timeout=0.5)
+        self.pack()
+
+        # Opearation mode
+        self.mode = mode
+        print("Operation mode: " + mode)
+
         self.width = 1150
         self.height = 800
         master.geometry(str(self.width) + "x" + str(self.height))
         self.master = master
         self.master.geometry("640x480")
-        self.master.title("Seirial Command Tool")
+        self.master.title("Serial Command Tool")
         self.svPath = tk.StringVar()
         self.create_widgets()
-        self.figure_frame = Figure.createFigure(self.master)
-        self.figure_frame.place(x=300, y=5)
-        
+
     def create_widgets(self):
-        
+
         # File Select Button
         self.fileSelectButton = tk.Button(text="Select", width=18)
-        self.fileSelectButton.place(x=0, y= 300)
+        self.fileSelectButton.place(x=0, y=300)
         self.fileSelectButton.bind("<ButtonPress>", self.openFileDialog)
-        
+
         # Table
-        self.tableData = ttk.Treeview(self.master, columns=["ID", "Name", "Score"])
-       # 列の設定
-        self.tableData.column('#0',width=0, stretch='no')
-        self.tableData.column('ID', anchor='center', width=80)
-        self.tableData.column('Name',anchor='w', width=100)
-        self.tableData.column('Score', anchor='center', width=80)
-        # 列の見出し設定
-        self.tableData.heading('#0',text='')
-        self.tableData.heading('ID', text='ID',anchor='center')
-        self.tableData.heading('Name', text='Name', anchor='w')
-        self.tableData.heading('Score',text='Score', anchor='center')
-        # レコードの追加
-        # self.tableData.insert(parent='', index='end', iid=0 ,values=(1, 'KAWASAKI',80))
-        # self.tableData.insert(parent='', index='end', iid=1 ,values=(2,'SHIMIZU', 90))
-        # self.tableData.insert(parent='', index='end', iid=2, values=(3,'TANAKA', 45))
-        # self.tableData.insert(parent='', index='end', iid=3, values=(4,'OKABE', 60))
-        # self.tableData.insert(parent='', index='end', iid=4, values=(5,'MIYAZAKI', 99))
-        # ウィジェットの配置
-        self.tableData.place(x=5, y=5)
-        
+        self.treeView = ttk.Treeview(self.master, columns=["ID", "Name", "Score"])
+        # Column settings
+        self.treeView.column('#0', width=0, stretch='no')
+        self.treeView.column('ID', anchor='center', width=80)
+        self.treeView.column('Name', anchor='w', width=100)
+        self.treeView.column('Score', anchor='center', width=80)
+        # Column headers
+        self.treeView.heading('#0', text="check")
+        self.treeView.heading('ID', text='ID', anchor='center')
+        self.treeView.heading('Name', text='Name', anchor='w')
+        self.treeView.heading('Score', text='Score', anchor='center')
+        # Record insertion
+        self.treeView.insert(parent='', index='end', iid=0, values=("☐", 1, 'KAWASAKI', 80))
+        self.treeView.insert(parent='', index='end', iid=1, values=("☐", 2, 'SHIMIZU', 90))
+        self.treeView.insert(parent='', index='end', iid=2, values=("☐", 3, 'TANAKA', 45))
+        self.treeView.insert(parent='', index='end', iid=3, values=("☐", 4, 'OKABE', 60))
+        # self.treeView.insert(parent='', index='end', iid=4, values=("□", 5,'MIYAZAKI', 99))
+        # Widget placement
+        self.treeView.place(x=5, y=5)
+
+        self.treeView.bind("<<TreeviewSelect>>", self.toggle_checkbox)
+
         # ListBox
         color_list = ["red", "blue", "green"]
         color_v = tkinter.StringVar(self.master, value=color_list)
         self.sampleListBox = tk.Listbox(self.master, height=5, listvariable=color_v)
         self.sampleListBox.place(x=200, y=300)
 
-        # Check Listbox status button
+        # Check ListBox status button
         self.checkBtn = tk.Button(text="Check", width=18)
-        self.checkBtn.place(x=500, y= 300)
+        self.checkBtn.place(x=500, y=300)
         self.checkBtn.bind("<ButtonPress>", self.checkListBoxStatus)
-        
+
         # Delete button from ListBox
         self.deleteBtn = tk.Button(text="Delete", width=18)
-        self.deleteBtn.place(x=500, y= 400)
+        self.deleteBtn.place(x=500, y=400)
         self.deleteBtn.bind("<ButtonPress>", self.deleteDataFromListBox)
-        
+
+        # Setting Dialog Button
+        self.settingBtn = tk.Button(text="Setting", width=15)
+        self.settingBtn.place(x=500, y=10)
+        self.settingBtn.bind("<ButtonPress>", self.openSettingDialog)
+
     def checkListBoxStatus(self, event):
         print(f"ListBox(ACTIVE):{self.sampleListBox.get(tk.ACTIVE)}")
         print(f"ListBox(CurSelect):{self.sampleListBox.curselection()}")
@@ -83,6 +94,32 @@ class MainWindow(tk.Frame):
         print("File Dialog open.")
         path = ""
         path = tkinter.filedialog.askopenfilename()
-        print(f"Selected file path:{path}")
+        print(f"Selected file path: {path}")
         return "break"
-        
+
+    def openSettingDialog(self, event):
+        """Open Setting Dialog"""
+        print("Setting Dialog open.")
+        setting_dialog = SettingDialog(self)
+        self.master.wait_window(setting_dialog)
+        return "break"
+
+    check_str = {"uncheck": "☐", "checked": "☑"}  # ☐☑☒ Checkbox characters
+    def toggle_checkbox(self, event):
+        row_id = self.treeView.focus()
+        row_vals = self.treeView.item(row_id, "values")
+        if row_vals[0] == self.check_str["uncheck"]:
+            self.treeView.item(row_id, values=(self.check_str["checked"], row_vals[1], row_vals[2], row_vals[3]))
+        else:
+            self.treeView.item(row_id, values=(self.check_str["uncheck"], row_vals[1], row_vals[2], row_vals[3]))
+
+    # Function to add IDs of rows with ☑ in the first column of Treeview to the ListBox
+    def add_checked_ids_to_listbox(self):
+        checked_ids = []
+        for item in self.treeView.get_children():
+            values = self.treeView.item(item, "values")
+            if values[0] == self.check_str["checked"]:
+                checked_ids.append(values[1])
+        self.sampleListBox.delete(0, tk.END)
+        for id in checked_ids:
+            self.sampleListBox.insert(tk.END, id)
