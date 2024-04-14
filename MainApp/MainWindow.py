@@ -36,29 +36,35 @@ class MainWindow(tk.Frame):
         self.fileSelectButton = tk.Button(text="Select", width=18)
         self.fileSelectButton.place(x=0, y=300)
         self.fileSelectButton.bind("<ButtonPress>", self.openFileDialog)
+        
+        # COM Port Select Spinbox
+        self.comPortLabel = tk.Label(text="COM Port")
+        self.comPortLabel.place(x=20, y=10)
+        self.comPortSpinbox = tk.Spinbox(from_=1, to=10)
+        self.comPortSpinbox.setvar(name="COM Port", value="3")
+        self.comPortSpinbox.place(x=20, y=30)
+        
 
         # Table
-        self.treeView = ttk.Treeview(self.master, columns=["ID", "Name", "Score"])
-        # Column settings
-        self.treeView.column('#0', width=0, stretch='no')
-        self.treeView.column('ID', anchor='center', width=80)
-        self.treeView.column('Name', anchor='w', width=100)
-        self.treeView.column('Score', anchor='center', width=80)
-        # Column headers
-        self.treeView.heading('#0', text="check")
-        self.treeView.heading('ID', text='ID', anchor='center')
-        self.treeView.heading('Name', text='Name', anchor='w')
-        self.treeView.heading('Score', text='Score', anchor='center')
-        # Record insertion
-        self.treeView.insert(parent='', index='end', iid=0, values=("☐", 1, 'KAWASAKI', 80))
-        self.treeView.insert(parent='', index='end', iid=1, values=("☐", 2, 'SHIMIZU', 90))
-        self.treeView.insert(parent='', index='end', iid=2, values=("☐", 3, 'TANAKA', 45))
-        self.treeView.insert(parent='', index='end', iid=3, values=("☐", 4, 'OKABE', 60))
-        # self.treeView.insert(parent='', index='end', iid=4, values=("□", 5,'MIYAZAKI', 99))
-        # Widget placement
-        self.treeView.place(x=5, y=5)
-
-        self.treeView.bind("<<TreeviewSelect>>", self.toggle_checkbox)
+        # self.treeView = ttk.Treeview(self.master, columns=["ID", "Name", "Score"])
+        # # Column settings
+        # self.treeView.column('#0', width=0, stretch='no')
+        # self.treeView.column('ID', anchor='center', width=80)
+        # self.treeView.column('Name', anchor='w', width=100)
+        # self.treeView.column('Score', anchor='center', width=80)
+        # # Column headers
+        # self.treeView.heading('#0', text="check")
+        # self.treeView.heading('ID', text='ID', anchor='center')
+        # self.treeView.heading('Name', text='Name', anchor='w')
+        # self.treeView.heading('Score', text='Score', anchor='center')
+        # # Record insertion
+        # self.treeView.insert(parent='', index='end', iid=0, values=("☐", 1, 'KAWASAKI', 80))
+        # self.treeView.insert(parent='', index='end', iid=1, values=("☐", 2, 'SHIMIZU', 90))
+        # self.treeView.insert(parent='', index='end', iid=2, values=("☐", 3, 'TANAKA', 45))
+        # self.treeView.insert(parent='', index='end', iid=3, values=("☐", 4, 'OKABE', 60))
+        # # Widget placement
+        # self.treeView.place(x=5, y=5)
+        # self.treeView.bind("<<TreeviewSelect>>", self.toggle_checkbox)
 
         # ListBox
         color_list = ["red", "blue", "green"]
