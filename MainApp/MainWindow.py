@@ -38,9 +38,10 @@ class MainWindow(tk.Frame):
         self.fileSelectButton.bind("<ButtonPress>", self.openFileDialog)
         
         # COM Port Select Spinbox
+        self.validate_com_port = self.master.register(self.validate_com_port)
         self.comPortLabel = tk.Label(text="COM Port")
         self.comPortLabel.place(x=20, y=10)
-        self.comPortSpinbox = tk.Spinbox(from_=1, to=10)
+        self.comPortSpinbox = tk.Spinbox(from_=1, to=10, validate="key", validatecommand=(self.validate_com_port, '%P'))
         self.comPortSpinbox.setvar(name="COM Port", value="3")
         self.comPortSpinbox.place(x=20, y=30)
         
@@ -87,6 +88,15 @@ class MainWindow(tk.Frame):
         self.settingBtn.place(x=500, y=10)
         self.settingBtn.bind("<ButtonPress>", self.openSettingDialog)
 
+    def validate_com_port(self, value):
+        if value == "":
+            return True
+        try:
+            int(value)
+        except ValueError:
+            return False
+        return True
+    
     def checkListBoxStatus(self, event):
         print(f"ListBox(ACTIVE):{self.sampleListBox.get(tk.ACTIVE)}")
         print(f"ListBox(CurSelect):{self.sampleListBox.curselection()}")
