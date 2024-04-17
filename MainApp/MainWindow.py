@@ -6,7 +6,9 @@ from ControlGUI.SettingDialog import SettingDialog
 # SPDX-FileCopyrightText: 2024 yumekasa5
 import tkinter.ttk as ttk
 import tkinter.filedialog
-
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import numpy as np
 
 
 class MainWindow(tk.Frame):
@@ -16,6 +18,12 @@ class MainWindow(tk.Frame):
         self.mode = mode
         # self.serial_com = SerialComControl(port="COM3", baudrate=9600, timeout=0.5)
         self.pack()
+        self.fig = Figure(figsize=(5, 4), dpi=100)
+        self.ax = self.fig.add_subplot(111)
+        self.canvas = FigureCanvasTkAgg(self.fig, master=master)  
+        self.canvas.draw()
+        self.canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
+        self.update_graph()
 
         # Opearation mode
         self.mode = mode
@@ -75,18 +83,8 @@ class MainWindow(tk.Frame):
 
         # Check ListBox status button
         self.checkBtn = tk.Button(text="Check", width=18)
-        self.checkBtn.place(x=500, y=300)
-        self.checkBtn.bind("<ButtonPress>", self.checkListBoxStatus)
-
-        # Delete button from ListBox
-        self.deleteBtn = tk.Button(text="Delete", width=18)
-        self.deleteBtn.place(x=500, y=400)
-        self.deleteBtn.bind("<ButtonPress>", self.deleteDataFromListBox)
-
-        # Setting Dialog Button
-        self.settingBtn = tk.Button(text="Setting", width=15)
-        self.settingBtn.place(x=500, y=10)
-        self.settingBtn.bind("<ButtonPress>", self.openSettingDialog)
+        self.button = tk.Button(self.master, text="Update", command=self.update_graph)
+        self.button.pack()
 
     def validate_com_port(self, value):
         if value == "":
@@ -139,3 +137,8 @@ class MainWindow(tk.Frame):
         self.sampleListBox.delete(0, tk.END)
         for id in checked_ids:
             self.sampleListBox.insert(tk.END, id)
+            
+    def update_graph(self):
+        self.ax.clear()
+        self.ax.plot(np.random.rand(10))
+        self.canvas.draw()
