@@ -29,6 +29,8 @@ if __name__ == "__main__":
         root.wait_window(modeSelectDialog)
         mode = modeSelectDialog.mode_String.get()
         
+        if mode == "unknown":
+            sys.exit()
         root = tkinter.Tk() # Re-create the root window, because the previous window was destroyed
         app = MainWindow(master=root, mode=mode)
         app.mainloop()
