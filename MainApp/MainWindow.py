@@ -1,15 +1,14 @@
-import tkinter as tk
-from SerialComControl.SerialComControl import SerialComControl
-from ControlGUI.SettingDialog import SettingDialog
-
 # !/usr/bin/python3
 # SPDX-FileCopyrightText: 2024 yumekasa5
+import tkinter as tk
 import tkinter.ttk as ttk
 import tkinter.filedialog
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import numpy as np
 
+# from SerialComControl.SerialComControl import SerialComControl
+from ControlGUI.SettingDialog import SettingDialog
 
 class MainWindow(tk.Frame):
     def __init__(self, master=None, mode="user"):
@@ -20,7 +19,8 @@ class MainWindow(tk.Frame):
         self.pack()
         self.fig = Figure(figsize=(5, 4), dpi=100)
         self.ax = self.fig.add_subplot(111)
-        self.canvas = FigureCanvasTkAgg(self.fig, master=master)  
+        self.ax2 = self.ax.twinx()
+        self.canvas = FigureCanvasTkAgg(self.fig, master=master)
         self.canvas.draw()
         self.canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
         self.update_graph()
@@ -140,5 +140,8 @@ class MainWindow(tk.Frame):
             
     def update_graph(self):
         self.ax.clear()
+        self.ax2.clear()
+        self.ax2 = self.ax.twinx()
+        self.ax2.plot(np.random.rand(10))
         self.ax.plot(np.random.rand(10))
         self.canvas.draw()

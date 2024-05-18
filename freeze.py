@@ -18,7 +18,7 @@ build_exe_option = {
 freeze(
     options = build_exe_option,
     console= [
-        {"script" : "SerialCommandTool.py"}
+        {"script" : "main.py"}
     ],
     zipfile=None,
     version_info={

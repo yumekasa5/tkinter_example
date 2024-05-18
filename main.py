@@ -4,7 +4,7 @@ import sys
 import tkinter
 
 from MainApp import MainWindow
-
+from ControlGUI.ModeSelectDialog import ModeSelectDialog
 
 if __name__ == "__main__":
     is_gui_mode = True
@@ -24,6 +24,12 @@ if __name__ == "__main__":
         
     if is_gui_mode:        
         root = tkinter.Tk()
+        # root.withdraw() # hide root window
+        modeSelectDiaglog = ModeSelectDialog(master=root)
+        # mode = diaglog.mode_String.get()
+        modeSelectDiaglog.mainloop()
+
+        # root.deiconify() # show root window
         app = MainWindow.MainWindow(master=root, mode=mode)
         app.mainloop()
     
