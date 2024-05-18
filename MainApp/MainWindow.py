@@ -3,12 +3,10 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 import tkinter.filedialog
-from matplotlib.figure import Figure
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-import numpy as np
 
 # from SerialComControl.SerialComControl import SerialComControl
 from ControlGUI.SettingDialog import SettingDialog
+from ControlGUI.FigureCanvas import FigureCanvasFrame
 
 class MainWindow(tk.Frame):
     def __init__(self, master=None, mode="user"):
@@ -17,24 +15,15 @@ class MainWindow(tk.Frame):
         self.mode = mode
         # self.serial_com = SerialComControl(port="COM3", baudrate=9600, timeout=0.5)
         self.pack()
-        self.fig = Figure(figsize=(5, 4), dpi=100)
-        self.ax = self.fig.add_subplot(111)
-        self.ax2 = self.ax.twinx()
-        self.canvas = FigureCanvasTkAgg(self.fig, master=master)
-        self.canvas.draw()
-        self.canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
-        self.update_graph()
 
         # Opearation mode
         self.mode = mode
         print("Operation mode: " + mode)
 
-        self.width = 1150
-        self.height = 800
+        self.width = 1920
+        self.height = 1080
         master.geometry(str(self.width) + "x" + str(self.height))
-        self.master = master
-        self.master.geometry("640x480")
-        self.master.title("Serial Command Tool")
+        self.master.title("Tkinter GUI")
         self.svPath = tk.StringVar()
         self.create_widgets()
 
@@ -83,8 +72,14 @@ class MainWindow(tk.Frame):
 
         # Check ListBox status button
         self.checkBtn = tk.Button(text="Check", width=18)
-        self.button = tk.Button(self.master, text="Update", command=self.update_graph)
+        self.button = tk.Button(self.master, text="Update", command=self.update_canvas)
         self.button.pack()
+        
+        # FigureCanvas
+        self.canvas_frame = tk.Frame(self.master)
+        self.canvas_frame.place(x=1000, y=10)
+        self.canvas = FigureCanvasFrame(master=self.canvas_frame)
+        self.update_canvas()
 
     def validate_com_port(self, value):
         if value == "":
@@ -138,10 +133,5 @@ class MainWindow(tk.Frame):
         for id in checked_ids:
             self.sampleListBox.insert(tk.END, id)
             
-    def update_graph(self):
-        self.ax.clear()
-        self.ax2.clear()
-        self.ax2 = self.ax.twinx()
-        self.ax2.plot(np.random.rand(10))
-        self.ax.plot(np.random.rand(10))
-        self.canvas.draw()
+    def update_canvas(self):
+        self.canvas.update()
