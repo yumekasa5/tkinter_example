@@ -3,7 +3,7 @@
 import sys
 import tkinter
 
-from MainApp import MainWindow
+from MainApp.MainWindow import MainWindow
 from ControlGUI.ModeSelectDialog import ModeSelectDialog
 
 if __name__ == "__main__":
@@ -23,13 +23,13 @@ if __name__ == "__main__":
             pass
         
     if is_gui_mode:        
-        root = tkinter.Tk()
-        # root.withdraw() # hide root window
-        modeSelectDiaglog = ModeSelectDialog(master=root)
-        # mode = diaglog.mode_String.get()
-        modeSelectDiaglog.mainloop()
-
-        # root.deiconify() # show root window
-        app = MainWindow.MainWindow(master=root, mode=mode)
+        root = tkinter.Tk()  # Create the root window
+        
+        modeSelectDialog = ModeSelectDialog(master=root)
+        root.wait_window(modeSelectDialog)
+        mode = modeSelectDialog.mode_String.get()
+        
+        root = tkinter.Tk() # Re-create the root window, because the previous window was destroyed
+        app = MainWindow(master=root, mode=mode)
         app.mainloop()
     
