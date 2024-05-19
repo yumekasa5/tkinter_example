@@ -30,17 +30,17 @@ class MainWindow(tk.Frame):
     def create_widgets(self):
 
         # File Select Button
-        self.fileSelectButton = tk.Button(text="Select", width=18)
+        self.fileSelectButton = tk.Button(text="Select", width=15, height=2, font=("Meyrio", 12))
         self.fileSelectButton.place(x=0, y=300)
         self.fileSelectButton.bind("<ButtonPress>", self.openFileDialog)
         
         # COM Port Select Spinbox
         self.validate_com_port = self.master.register(self.validate_com_port)
-        self.comPortLabel = tk.Label(text="COM Port")
+        self.comPortLabel = tk.Label(text="COM Port :", width=10, height=2, font=("Meyrio", 12))
         self.comPortLabel.place(x=20, y=10)
-        self.comPortSpinbox = tk.Spinbox(from_=1, to=10, validate="key", validatecommand=(self.validate_com_port, '%P'))
+        self.comPortSpinbox = tk.Spinbox(from_=1, to=10, validate="key", width=3, validatecommand=(self.validate_com_port, '%P'), font=("Meyrio", 12))
         self.comPortSpinbox.setvar(name="COM Port", value="3")
-        self.comPortSpinbox.place(x=20, y=30)
+        self.comPortSpinbox.place(x=125, y=20)
         
 
         # Table
@@ -67,13 +67,19 @@ class MainWindow(tk.Frame):
         # ListBox
         color_list = ["red", "blue", "green"]
         color_v = tkinter.StringVar(self.master, value=color_list)
-        self.sampleListBox = tk.Listbox(self.master, height=5, listvariable=color_v)
+        self.sampleListBox = tk.Listbox(self.master, width=10, height=5, listvariable=color_v, font=("Meyrio", 12))
         self.sampleListBox.place(x=200, y=300)
 
         # Check ListBox status button
-        self.checkBtn = tk.Button(text="Check", width=18)
-        self.button = tk.Button(self.master, text="Update", command=self.update_canvas)
-        self.button.pack()
+        self.checkBtn = tk.Button(text="Check", width=15, height=2, font=("Meyrio", 12))
+        self.updateCanvasButton = tk.Button(text="Update", width=15, height=2, font=("Meyrio", 12), command=self.update_canvas)
+        self.updateCanvasButton.place(x=1000, y=500)
+        
+        # Open Setting Dialog Button
+        self.settingButton = tk.Button(text="Setting", width=15, height=2, font=("Meyrio", 12))
+        self.settingButton.place(x=0, y=400)
+        self.settingButton.bind("<ButtonPress>", self.openSettingDialog)
+        self.settingButton.place(x=0, y=400)
         
         # FigureCanvas
         self.canvas_frame = tk.Frame(self.master)
@@ -110,7 +116,7 @@ class MainWindow(tk.Frame):
         """Open Setting Dialog"""
         print("Setting Dialog open.")
         setting_dialog = SettingDialog(self)
-        self.master.wait_window(setting_dialog)
+        # self.master.wait_window(setting_dialog)
         return "break"
 
     check_str = {"uncheck": "☐", "checked": "☑"}  # ☐☑☒ Checkbox characters
